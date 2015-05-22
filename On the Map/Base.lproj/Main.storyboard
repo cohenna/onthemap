@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="LoginViewController" customModule="On_the_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -15,11 +16,100 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Email" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jum-I7-Vs1">
+                                <rect key="frame" x="16" y="285" width="568" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.75294117647058822" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OlG-H0-t00">
+                                <rect key="frame" x="16" y="323" width="568" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.75294117647058822" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSb-ha-hPr">
+                                <rect key="frame" x="16" y="361" width="568" height="30"/>
+                                <color key="backgroundColor" red="0.68562578914141414" green="0.25213538067459956" blue="0.09332136127921313" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginWithUdacity:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="SkW-Mg-W6P"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ijf-ro-Asn">
+                                <rect key="frame" x="16" y="520" width="568" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Sign in With Facebook">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Log into Udacity" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cx-8T-ya7">
+                                <rect key="frame" x="224" y="211" width="152" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="udacity" translatesAutoresizingMaskIntoConstraints="NO" id="Bhc-5P-QaR">
+                                <rect key="frame" x="219" y="36" width="163" height="167"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7iV-bv-bee">
+                                <rect key="frame" x="178" y="405" width="183" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaR-3w-BxT">
+                                <rect key="frame" x="369" y="399" width="53" height="30"/>
+                                <state key="normal" title="Sign up">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Jum-I7-Vs1" firstAttribute="top" secondItem="0cx-8T-ya7" secondAttribute="bottom" constant="40" id="0zn-nH-g7K"/>
+                            <constraint firstItem="Ijf-ro-Asn" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="4Zv-SA-Ozw"/>
+                            <constraint firstItem="0cx-8T-ya7" firstAttribute="top" secondItem="Bhc-5P-QaR" secondAttribute="bottom" constant="8" id="AzP-K6-ZTs"/>
+                            <constraint firstItem="Jum-I7-Vs1" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="Ccb-aR-6aI"/>
+                            <constraint firstAttribute="centerX" secondItem="0cx-8T-ya7" secondAttribute="centerX" constant="-0.5" id="EcF-ZA-42y"/>
+                            <constraint firstItem="IaR-3w-BxT" firstAttribute="leading" secondItem="7iV-bv-bee" secondAttribute="trailing" constant="8" id="Gah-rU-9qX"/>
+                            <constraint firstItem="7iV-bv-bee" firstAttribute="top" secondItem="CSb-ha-hPr" secondAttribute="bottom" constant="15" id="Kir-fc-Kxm"/>
+                            <constraint firstItem="OlG-H0-t00" firstAttribute="top" secondItem="Jum-I7-Vs1" secondAttribute="bottom" constant="8" id="MB6-sd-0eN"/>
+                            <constraint firstItem="OlG-H0-t00" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="MQT-ge-K6v"/>
+                            <constraint firstItem="CSb-ha-hPr" firstAttribute="top" secondItem="OlG-H0-t00" secondAttribute="bottom" constant="8" id="NdR-KW-LNM"/>
+                            <constraint firstAttribute="centerX" secondItem="7iV-bv-bee" secondAttribute="centerX" constant="30.5" id="PI7-T8-pP5"/>
+                            <constraint firstItem="CSb-ha-hPr" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="RAk-Mi-8VQ"/>
+                            <constraint firstItem="OlG-H0-t00" firstAttribute="top" secondItem="Jum-I7-Vs1" secondAttribute="bottom" constant="8" id="UcL-2h-1bh"/>
+                            <constraint firstItem="CSb-ha-hPr" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="Yr3-8Q-IPc"/>
+                            <constraint firstItem="CSb-ha-hPr" firstAttribute="top" secondItem="OlG-H0-t00" secondAttribute="bottom" constant="8" id="a6M-SI-tdi"/>
+                            <constraint firstItem="Ijf-ro-Asn" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hJX-qz-zVc"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="CSb-ha-hPr" secondAttribute="bottom" constant="209" id="hYz-dh-NLh"/>
+                            <constraint firstItem="Jum-I7-Vs1" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="iJK-jF-wHu"/>
+                            <constraint firstItem="IaR-3w-BxT" firstAttribute="top" secondItem="CSb-ha-hPr" secondAttribute="bottom" constant="9" id="ilg-eN-iDQ"/>
+                            <constraint firstAttribute="centerX" secondItem="Bhc-5P-QaR" secondAttribute="centerX" constant="-0.5" id="pAy-m9-ZRI"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Ijf-ro-Asn" secondAttribute="bottom" constant="50" id="qO9-Kz-D2i"/>
+                            <constraint firstItem="OlG-H0-t00" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="zrz-eh-K4G"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="emailText" destination="Jum-I7-Vs1" id="i5L-1Z-qXG"/>
+                        <outlet property="facebookButton" destination="Ijf-ro-Asn" id="6YO-zF-pkT"/>
+                        <outlet property="loginButton" destination="CSb-ha-hPr" id="rDf-dp-hHQ"/>
+                        <outlet property="passwordText" destination="OlG-H0-t00" id="eOU-NC-08W"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="udacity" width="133" height="133"/>
+    </resources>
 </document>
