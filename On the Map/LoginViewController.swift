@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
 // should use i18n in the future, for now, hard-code
 var DEFAULT_EMAIL_TEXT = "Email"
@@ -18,19 +19,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var emailText: UITextField!
     @IBOutlet weak var passwordText: UITextField!
-    @IBOutlet weak var facebookButton: UIButton!
+    @IBOutlet weak var fbLoginButton: UIButton!
     
-    var udacityUser : UdacityUser?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        //loginButton.backgroundColor = UIColor.redColor()
         loginButton.layer.cornerRadius = 5
-        facebookButton.layer.cornerRadius = 5
         errorText.layer.cornerRadius = 5
         passwordText.delegate = self
         emailText.delegate = self
+        
+        emailText.text = DEFAULT_EMAIL_TEXT
+        passwordText.text = DEFAULT_PASSWORD_TEXT
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // Subscribe to keyboard notifications to allow the view to raise when necessary
+        self.subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.unsubscribeFromKeyboardNotifications()
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,6 +79,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
         if textField == passwordText {
             self.loginWithUdacity(loginButton)
             return true
@@ -92,18 +105,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         })
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showHome" {
-            var navigationController = (segue.destinationViewController as! UINavigationController)
-            (navigationController.viewControllers[0] as! TabBarController).udacityUser = self.udacityUser
-        }
-    }
-    
 
     @IBAction func loginWithUdacity(sender: UIButton) {
         println("loginWithUdacity start")
         loginButton.enabled = false
-        UdacityClient.sharedInstance().login(emailText.text, password: passwordText.text, completionHandler: {(result: UdacityUser?, error: NSError?) in
+        UdacityClient.sharedInstance().login(emailText.text, password: passwordText.text, fbToken: nil, completionHandler: {(result: UdacityUser?, error: NSError?) in
             println("loginWithUdactiy completion handler start")
             dispatch_async(dispatch_get_main_queue(), {
                 self.loginButton.enabled = true
@@ -112,7 +118,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             if let user = result {
                 // success
                 println("success")
-                self.udacityUser = user
+                (UIApplication.sharedApplication().delegate as! AppDelegate).udacityUser = user
                 dispatch_async(dispatch_get_main_queue(), {
                     self.performSegueWithIdentifier("showHome", sender: self)
                 })
@@ -130,6 +136,59 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         })
     }
+    
+    func loginWithFacebook(token: String) {
+        UdacityClient.sharedInstance().login(nil, password: nil, fbToken: token, completionHandler: {(result: UdacityUser?, error: NSError?) in
+            println("loginWithFacebook completion handler start")
+            if let user = result {
+                // success
+                println("success with fb login")
+                (UIApplication.sharedApplication().delegate as! AppDelegate).udacityUser = user
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.performSegueWithIdentifier("showHome", sender: self)
+                })
+            } else {
+                self.handleOtherLoginError(error)
+            }
+        })
+    }
 
+    @IBAction func fbLogin(sender: AnyObject) {
+        
+        if let token = FBSDKAccessToken.currentAccessToken() {
+            var tokenString = token.tokenString
+            println("already logged in, token=\(tokenString)")
+            self.loginWithFacebook(tokenString)
+            return
+        }
+        
+        var login = FBSDKLoginManager()
+        login.logInWithReadPermissions(["email"], handler: { (result: FBSDKLoginManagerLoginResult!, error) in
+            if let error = error {
+                UIView.shakeView(self.fbLoginButton)
+                self.errorText.hidden = false
+                self.errorText.text = "Facebook Login Error"
+            } else if result.isCancelled {
+                UIView.shakeView(self.fbLoginButton)
+                self.errorText.hidden = false
+                self.errorText.text = "Facebook Login Error"
+            } else {
+                var token = result.token.tokenString
+                self.loginWithFacebook(token)
+
+            }
+        })
+        
+    }
+    
+    @IBAction func signUp(sender: AnyObject) {
+        println("signUp")
+        var urlString = "https://www.udacity.com/account/auth#!/signup"
+        if let url = NSURL(string: urlString) {
+            UIApplication.sharedApplication().openURL(url)
+        } else {
+            showErrorAlert("Cannot Sign Up, Invalid URL: \(urlString)")
+        }
+    }
 }
 

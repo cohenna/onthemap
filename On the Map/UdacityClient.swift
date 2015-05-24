@@ -80,6 +80,10 @@ class UdacityClient : NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonBody, options: nil, error: &jsonifyError)
+
+        println("HTTPBody count=\(request.HTTPBody!.length)")
+        var HTTPBodyAsString = NSString(data: request.HTTPBody!, encoding: NSUTF8StringEncoding)!
+        println("HTTPBodyAsString length:\(HTTPBodyAsString.length) str:\(HTTPBodyAsString)")
         
         /* 4. Make the request */
         let task = session.dataTaskWithRequest(request) {data, response, downloadError in
@@ -177,15 +181,20 @@ class UdacityClient : NSObject {
         return Singleton.sharedInstance
     }
     
-    func login(username : String?, password : String?, completionHandler: (result: UdacityUser?, error: NSError?) -> Void) {
+    func login(username : String?, password : String?, fbToken : String?, completionHandler: (result: UdacityUser?, error: NSError?) -> Void) {
         var parameters = [String:AnyObject]()
         //parameters[
         var jsonBody = [String:AnyObject]()
-        var udacity = [String:AnyObject]()
-        udacity["username"] = username
-        udacity["password"] = password
-        jsonBody["udacity"] = udacity
-        
+        if let fbToken = fbToken {
+            var access_token = [String:AnyObject]()
+            access_token["access_token"] = fbToken
+            jsonBody["facebook_mobile"] = access_token
+        } else {
+            var udacity = [String:AnyObject]()
+            udacity["username"] = username
+            udacity["password"] = password
+            jsonBody["udacity"] = udacity
+        }
         taskForPOSTMethod("session", parameters: parameters, jsonBody: jsonBody) { (res, err) in
             if let err = err {
                 completionHandler(result: nil, error: err)
@@ -213,7 +222,7 @@ class UdacityClient : NSObject {
             
             
         }
-
+        
     }
     
 }

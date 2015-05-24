@@ -1,5 +1,5 @@
 //
-//  PulseClient.swift
+//  ParseClient.swift
 //  On the Map
 //
 //  Created by Nick Cohen on 5/23/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PulseClient : NSObject {
+class ParseClient : NSObject {
     
     
     /* Shared session */
@@ -36,7 +36,7 @@ class PulseClient : NSObject {
         //mutableParameters[ParameterKeys.ApiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL and configure the request */
-        let urlString = baseImageURLString + method + PulseClient.escapedParameters(mutableParameters)
+        let urlString = baseImageURLString + method + ParseClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
         println("url=\(url)")
         let request = NSMutableURLRequest(URL: url)
@@ -51,10 +51,10 @@ class PulseClient : NSObject {
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
-                let newError = PulseClient.errorForData(data, response: response, error: error)
+                let newError = ParseClient.errorForData(data, response: response, error: error)
                 completionHandler(result: nil, error: downloadError)
             } else {
-                PulseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                ParseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
         }
         
@@ -74,12 +74,52 @@ class PulseClient : NSObject {
         //mutableParameters[ParameterKeys.ApiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL and configure the request */
-        let urlString = baseImageURLString + method + PulseClient.escapedParameters(mutableParameters)
+        let urlString = baseImageURLString + method + ParseClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
         let request = NSMutableURLRequest(URL: url)
         var jsonifyError: NSError? = nil
         request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonBody, options: nil, error: &jsonifyError)
+        
+        /* 4. Make the request */
+        let task = session.dataTaskWithRequest(request) {data, response, downloadError in
+            
+            /* 5/6. Parse the data and use the data (happens in completion handler) */
+            if let error = downloadError {
+                let newError = ParseClient.errorForData(data, response: response, error: error)
+                completionHandler(result: nil, error: downloadError)
+            } else {
+                ParseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+            }
+        }
+        
+        /* 7. Start the request */
+        task.resume()
+        
+        return task
+    }
+    
+    
+    // MARK: - PUT
+    
+    func taskForPUTMethod(method: String, parameters: [String : AnyObject], jsonBody: [String:AnyObject], completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
+        
+        /* 1. Set the parameters */
+        var mutableParameters = parameters
+        //mutableParameters[ParameterKeys.ApiKey] = Constants.ApiKey
+        
+        /* 2/3. Build the URL and configure the request */
+        let urlString = baseImageURLString + method + ParseClient.escapedParameters(mutableParameters)
+        let url = NSURL(string: urlString)!
+        let request = NSMutableURLRequest(URL: url)
+        var jsonifyError: NSError? = nil
+        request.HTTPMethod = "PUT"
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(jsonBody, options: nil, error: &jsonifyError)
         
@@ -88,10 +128,10 @@ class PulseClient : NSObject {
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
-                let newError = PulseClient.errorForData(data, response: response, error: error)
+                let newError = ParseClient.errorForData(data, response: response, error: error)
                 completionHandler(result: nil, error: downloadError)
             } else {
-                PulseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                ParseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
         }
         
@@ -117,7 +157,7 @@ class PulseClient : NSObject {
         
         /*if let parsedResult = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? [String : AnyObject] {
         
-        if let errorMessage = parsedResult[PulseClient.JSONResponseKeys.StatusMessage] as? String {
+        if let errorMessage = parsedResult[ParseClient.JSONResponseKeys.StatusMessage] as? String {
         
         let userInfo = [NSLocalizedDescriptionKey : errorMessage]
         
@@ -167,10 +207,10 @@ class PulseClient : NSObject {
     
     // MARK: - Shared Instance
     
-    class func sharedInstance() -> PulseClient {
+    class func sharedInstance() -> ParseClient {
         
         struct Singleton {
-            static var sharedInstance = PulseClient()
+            static var sharedInstance = ParseClient()
         }
         
         return Singleton.sharedInstance
@@ -207,17 +247,19 @@ class PulseClient : NSObject {
                 var duplicateCheck = [String:Bool]()
                 for result in results {
                     var studentLocation = StudentLocation(fromJSON: result)
-                    if let ok = duplicateCheck[studentLocation.uniqueKey!] {
-                        if !allowDuplicates {
-                            continue
+                    if let uniqueKey = studentLocation.uniqueKey {
+                        if let ok = duplicateCheck[uniqueKey] {
+                            if !allowDuplicates {
+                                continue
+                            }
                         }
+                        studentLocations.append(studentLocation)
+                        duplicateCheck[uniqueKey] = true
                     }
-                    studentLocations.append(studentLocation)
-                    duplicateCheck[studentLocation.uniqueKey!] = true
                 }
                 completionHandler(result: studentLocations, error: nil)
             } else {
-                completionHandler(result:nil, error: NSError(domain: "PulseClient", code: -1, userInfo: nil))
+                completionHandler(result:nil, error: NSError(domain: "ParseClient", code: -1, userInfo: nil))
             }
             
             
@@ -226,12 +268,55 @@ class PulseClient : NSObject {
         
     }
     
-    func postStudentLocation(studentLocaiton : StudentLocation) {
+    func postStudentLocation(studentLocation : StudentLocation,  completionHandler: (result: AnyObject?, error: NSError?) -> Void) {
+        var parameters = [String:AnyObject]()
+        var jsonBody = [String:AnyObject]()
+        jsonBody["uniqueKey"] = studentLocation.uniqueKey!
+        jsonBody["firstName"] = studentLocation.firstName!
+        jsonBody["lastName"] = studentLocation.lastName!
+        jsonBody["mapString"] = studentLocation.mapString!
+        jsonBody["mediaURL"] = studentLocation.mediaURL!
+        jsonBody["latitude"] = studentLocation.latitude!
+        jsonBody["longitude"] = studentLocation.longitude!
         
+        
+        taskForPOSTMethod("StudentLocation", parameters: parameters, jsonBody: jsonBody) { (res, err) in
+            if let err = err {
+                completionHandler(result: nil, error: err)
+                return
+            }
+            if let objectId = res.valueForKey("objectId") as? String {
+                completionHandler(result: objectId, error: nil)
+            } else {
+                completionHandler(result:nil, error: NSError(domain: "ParseClient", code: -1, userInfo: nil))
+            }
+        }
     }
     
-    func putStudentLocation(studentlocation: StudentLocation) {
+    func putStudentLocation(studentLocation: StudentLocation,  completionHandler: (result: AnyObject?, error: NSError?) -> Void) {
+        var parameters = [String:AnyObject]()
+        var jsonBody = [String:AnyObject]()
+        //jsonBody["objectId"] = studentLocation.objectId!
+        jsonBody["uniqueKey"] = studentLocation.uniqueKey!
+        jsonBody["firstName"] = studentLocation.firstName!
+        jsonBody["lastName"] = studentLocation.lastName!
+        jsonBody["mapString"] = studentLocation.mapString!
+        jsonBody["mediaURL"] = studentLocation.mediaURL!
+        jsonBody["latitude"] = studentLocation.latitude!
+        jsonBody["longitude"] = studentLocation.longitude!
         
+        
+        taskForPUTMethod("StudentLocation/\(studentLocation.objectId!)", parameters: parameters, jsonBody: jsonBody) { (res, err) in
+            if let err = err {
+                completionHandler(result: nil, error: err)
+                return
+            }
+            if let updatedAt = res.valueForKey("updatedAt") as? String {
+                completionHandler(result: updatedAt, error: nil)
+            } else {
+                completionHandler(result:nil, error: NSError(domain: "ParseClient", code: -1, userInfo: nil))
+            }
+        }
     }
     
 }
