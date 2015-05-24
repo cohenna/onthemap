@@ -22,7 +22,7 @@ class TabBarController : UITabBarController {
         
         objc_sync_enter((UIApplication.sharedApplication().delegate as! AppDelegate).studentLocations)
         if (UIApplication.sharedApplication().delegate as! AppDelegate).studentLocations.count == 0 {
-            ParseClient.sharedInstance().getStudentLocations(nil,  limit: 10,  offset: 0, allowDuplicates: false, completionHandler: { (result : [StudentLocation]?, error) in
+            ParseClient.sharedInstance().getStudentLocations(nil,  limit: 100,  offset: 0, allowDuplicates: false, completionHandler: { (result : [StudentLocation]?, error) in
                 println("tabbarcontroller count=\(result!.count)")
                 for studentLocation in result! {
                     (UIApplication.sharedApplication().delegate as! AppDelegate).studentLocations.append(studentLocation)
