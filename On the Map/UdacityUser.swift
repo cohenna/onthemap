@@ -11,14 +11,14 @@ import Foundation
 class UdacityUser {
     var firstName = ""
     var lastName = ""
-    var id = ""
+    var uniqueKey = ""
     
     init(fromJSON: AnyObject?) {
         if let result = fromJSON as AnyObject? {
             var user = result.valueForKey("user") as! [String : AnyObject]
             firstName = user["first_name"] as! String
             lastName = user["last_name"] as! String
-            id = user["key"] as! String
+            uniqueKey = user["key"] as! String
         }
         
     }

@@ -14,16 +14,21 @@ var DEFAULT_PASSWORD_TEXT = "Password"
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var errorText: UILabel!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var emailText: UITextField!
     @IBOutlet weak var passwordText: UITextField!
     @IBOutlet weak var facebookButton: UIButton!
+    
+    var udacityUser : UdacityUser?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //loginButton.backgroundColor = UIColor.redColor()
         loginButton.layer.cornerRadius = 5
         facebookButton.layer.cornerRadius = 5
+        errorText.layer.cornerRadius = 5
         passwordText.delegate = self
         emailText.delegate = self
     }
@@ -40,6 +45,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         } else if textField == emailText && textField.text == DEFAULT_EMAIL_TEXT {
             textField.text = ""
         }
+        
+        
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool  {
+        errorText.hidden = true
+        errorText.text = ""
+        return true
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
@@ -53,19 +66,56 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField == passwordText {
+            self.loginWithUdacity(loginButton)
+            return true
+        }
+        return false
+    }
+    
     func handleBadLoginPasswordError() {
-        
+        println("handleBadLoginPasswordError")
+        dispatch_async(dispatch_get_main_queue(), {
+            UIView.shakeView(self.passwordText)
+            UIView.shakeView(self.emailText)
+            self.errorText.hidden = false
+            self.errorText.text = "Invalid Login"
+        })
     }
     
     func handleOtherLoginError(error: NSError?) {
-        
+        dispatch_async(dispatch_get_main_queue(), {
+            UIView.shakeView(self.loginButton)
+            self.errorText.hidden = false
+            self.errorText.text = "Network Error"
+        })
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showHome" {
+            var navigationController = (segue.destinationViewController as! UINavigationController)
+            (navigationController.viewControllers[0] as! TabBarController).udacityUser = self.udacityUser
+        }
+    }
+    
 
     @IBAction func loginWithUdacity(sender: UIButton) {
+        println("loginWithUdacity start")
+        loginButton.enabled = false
         UdacityClient.sharedInstance().login(emailText.text, password: passwordText.text, completionHandler: {(result: UdacityUser?, error: NSError?) in
+            println("loginWithUdactiy completion handler start")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.loginButton.enabled = true
+            })
+            
             if let user = result {
                 // success
                 println("success")
+                self.udacityUser = user
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.performSegueWithIdentifier("showHome", sender: self)
+                })
             } else if let error = error {
                 // error
                 if (error.code == ERROR_BAD_LOGIN_PASSWORD_COMBINATION) {

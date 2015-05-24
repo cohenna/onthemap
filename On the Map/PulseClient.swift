@@ -1,17 +1,15 @@
 //
-//  UdacityAPI.swift
+//  PulseClient.swift
 //  On the Map
 //
-//  Created by Nick Cohen on 5/19/15.
+//  Created by Nick Cohen on 5/23/15.
 //  Copyright (c) 2015 Nick Cohen. All rights reserved.
 //
 
 import Foundation
-import UIKit
 
-var ERROR_BAD_LOGIN_PASSWORD_COMBINATION = 1001
-
-class UdacityClient : NSObject {
+class PulseClient : NSObject {
+    
     
     /* Shared session */
     var session: NSURLSession
@@ -22,7 +20,7 @@ class UdacityClient : NSObject {
     /* Authentication state */
     var sessionID : String? = nil
     var userID : Int? = nil
-    var baseImageURLString = "https://www.udacity.com/api/"
+    var baseImageURLString = "https://api.parse.com/1/classes/"
     
     override init() {
         session = NSURLSession.sharedSession()
@@ -38,9 +36,13 @@ class UdacityClient : NSObject {
         //mutableParameters[ParameterKeys.ApiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL and configure the request */
-        let urlString = baseImageURLString + method + UdacityClient.escapedParameters(mutableParameters)
+        let urlString = baseImageURLString + method + PulseClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
-        let request = NSURLRequest(URL: url)
+        println("url=\(url)")
+        let request = NSMutableURLRequest(URL: url)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+
         
         //request.HTTPBody = body
         
@@ -49,10 +51,10 @@ class UdacityClient : NSObject {
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
-                let newError = UdacityClient.errorForData(data, response: response, error: error)
+                let newError = PulseClient.errorForData(data, response: response, error: error)
                 completionHandler(result: nil, error: downloadError)
             } else {
-                UdacityClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                PulseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
         }
         
@@ -72,7 +74,7 @@ class UdacityClient : NSObject {
         //mutableParameters[ParameterKeys.ApiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL and configure the request */
-        let urlString = baseImageURLString + method + UdacityClient.escapedParameters(mutableParameters)
+        let urlString = baseImageURLString + method + PulseClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
         let request = NSMutableURLRequest(URL: url)
         var jsonifyError: NSError? = nil
@@ -86,10 +88,10 @@ class UdacityClient : NSObject {
             
             /* 5/6. Parse the data and use the data (happens in completion handler) */
             if let error = downloadError {
-                let newError = UdacityClient.errorForData(data, response: response, error: error)
+                let newError = PulseClient.errorForData(data, response: response, error: error)
                 completionHandler(result: nil, error: downloadError)
             } else {
-                UdacityClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
+                PulseClient.parseJSONWithCompletionHandler(data, completionHandler: completionHandler)
             }
         }
         
@@ -114,13 +116,13 @@ class UdacityClient : NSObject {
     class func errorForData(data: NSData?, response: NSURLResponse?, error: NSError) -> NSError {
         
         /*if let parsedResult = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? [String : AnyObject] {
-            
-            if let errorMessage = parsedResult[UdacityClient.JSONResponseKeys.StatusMessage] as? String {
-                
-                let userInfo = [NSLocalizedDescriptionKey : errorMessage]
-                
-                return NSError(domain: "TMDB Error", code: 1, userInfo: userInfo)
-            }
+        
+        if let errorMessage = parsedResult[PulseClient.JSONResponseKeys.StatusMessage] as? String {
+        
+        let userInfo = [NSLocalizedDescriptionKey : errorMessage]
+        
+        return NSError(domain: "TMDB Error", code: 1, userInfo: userInfo)
+        }
         }*/
         
         return error
@@ -128,9 +130,6 @@ class UdacityClient : NSObject {
     
     /* Helper: Given raw JSON, return a usable Foundation object */
     class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        // skip first 5 bytes of response
-        let data = data.subdataWithRange(NSMakeRange(5, data.length - 5))
-        
         var dataAsString = NSString(data: data, encoding: NSUTF8StringEncoding)
         println(dataAsString)
         
@@ -168,52 +167,71 @@ class UdacityClient : NSObject {
     
     // MARK: - Shared Instance
     
-    class func sharedInstance() -> UdacityClient {
+    class func sharedInstance() -> PulseClient {
         
         struct Singleton {
-            static var sharedInstance = UdacityClient()
+            static var sharedInstance = PulseClient()
         }
         
         return Singleton.sharedInstance
     }
     
-    func login(username : String?, password : String?, completionHandler: (result: UdacityUser?, error: NSError?) -> Void) {
+    func getStudentLocations(uniqueKey : String?, limit : Int?, offset : Int?, allowDuplicates: Bool, completionHandler: (result: [StudentLocation]?, error: NSError?) -> Void) {
         var parameters = [String:AnyObject]()
         //parameters[
-        var jsonBody = [String:AnyObject]()
-        var udacity = [String:AnyObject]()
-        udacity["username"] = username
-        udacity["password"] = password
-        jsonBody["udacity"] = udacity
         
-        taskForPOSTMethod("session", parameters: parameters, jsonBody: jsonBody) { (res, err) in
+        if let uniqueKey = uniqueKey {
+            // look for one user
+            var jsonText = "{\"uniqueKey\":\"\(uniqueKey)\"}"
+            parameters["where"] = jsonText
+        } else {
+            // multiple users
+            var x = 100
+            if let limit = limit {
+                x = limit
+            }
+            parameters["limit"] = x
+            
+            if let offset = offset {
+                parameters["offset"] = offset
+            }
+        }
+        
+        taskForGETMethod("StudentLocation", parameters: parameters) { (res, err) in
             if let err = err {
                 completionHandler(result: nil, error: err)
                 return
             }
-            if let account = res.valueForKey("account") as? [String:AnyObject] {
-                //var account = res.valueForKey("account") as! [String : AnyObject]
-                if let key = account["key"] as? String? {
-                    //var key = account?["key"] as! String
-                    
-                    // got key, now get user details
-                    self.taskForGETMethod("users/" + key!, parameters: parameters) { (res, err) in
-                        //
-                        var user = UdacityUser(fromJSON: res)
-                        completionHandler(result: user, error: err)
+            if let results = res.valueForKey("results") as? [[String:AnyObject]] {
+                var studentLocations : [StudentLocation] = [StudentLocation]()
+                var duplicateCheck = [String:Bool]()
+                for result in results {
+                    var studentLocation = StudentLocation(fromJSON: result)
+                    if let ok = duplicateCheck[studentLocation.uniqueKey!] {
+                        if !allowDuplicates {
+                            continue
+                        }
                     }
+                    studentLocations.append(studentLocation)
+                    duplicateCheck[studentLocation.uniqueKey!] = true
                 }
-                else {
-                    // todo
-                }
+                completionHandler(result: studentLocations, error: nil)
             } else {
-                completionHandler(result:nil, error: NSError(domain: "UdacityClient", code: ERROR_BAD_LOGIN_PASSWORD_COMBINATION, userInfo: nil))
+                completionHandler(result:nil, error: NSError(domain: "PulseClient", code: -1, userInfo: nil))
             }
             
             
             
         }
-
+        
+    }
+    
+    func postStudentLocation(studentLocaiton : StudentLocation) {
+        
+    }
+    
+    func putStudentLocation(studentlocation: StudentLocation) {
+        
     }
     
 }
