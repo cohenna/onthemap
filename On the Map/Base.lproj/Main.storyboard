@@ -174,17 +174,26 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ms5-bL-Kqp">
+                                <rect key="frame" x="282" y="400" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="hdU-8u-ppB" secondAttribute="centerX" constant="-0.5" id="6Vm-Gc-RzS"/>
                             <constraint firstAttribute="centerX" secondItem="db3-5E-2Ro" secondAttribute="centerX" id="hrh-tc-pee"/>
+                            <constraint firstAttribute="centerX" secondItem="ms5-bL-Kqp" secondAttribute="centerX" constant="-0.5" id="kNV-36-dps"/>
                             <constraint firstAttribute="centerX" secondItem="nqh-Th-Vti" secondAttribute="centerX" id="my9-YA-gpW"/>
+                            <constraint firstItem="hdU-8u-ppB" firstAttribute="top" secondItem="ms5-bL-Kqp" secondAttribute="bottom" constant="8" id="o1v-2Q-I5b"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="ms5-bL-Kqp" id="8tl-aq-rJL"/>
                         <outlet property="findOnTheMapButton" destination="hdU-8u-ppB" id="JCM-Qa-cCf"/>
                         <outlet property="locationText" destination="db3-5E-2Ro" id="WEw-ey-6aX"/>
+                        <outlet property="outerView" destination="sGk-S8-DIq" id="Q7W-pJ-GfD"/>
+                        <outlet property="studyingLabel" destination="nqh-Th-Vti" id="Sqy-0C-4CG"/>
                         <segue destination="Obw-xI-bi7" kind="show" identifier="showEnterUrl" id="Wu7-cO-bO5"/>
                     </connections>
                 </viewController>
@@ -208,7 +217,7 @@
                                 <rect key="frame" x="0.0" y="110" width="600" height="490"/>
                             </mapView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Enter URL" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nUO-92-laI">
-                                <rect key="frame" x="16" y="72" width="568" height="30"/>
+                                <rect key="frame" x="16" y="72" width="514" height="30"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -225,11 +234,22 @@
                                     <action selector="submit:" destination="Obw-xI-bi7" eventType="touchUpInside" id="z1u-zc-FQI"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXu-tP-jbi">
+                                <rect key="frame" x="538" y="72" width="52" height="30"/>
+                                <state key="normal" title="Browse">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="browse:" destination="Obw-xI-bi7" eventType="touchUpInside" id="E0j-Po-1Mz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="5Qc-un-DJs" secondAttribute="centerX" constant="-0.5" id="7Nx-2x-ISV"/>
-                            <constraint firstAttribute="centerX" secondItem="nUO-92-laI" secondAttribute="centerX" id="UhA-Kr-3dA"/>
+                            <constraint firstItem="nUO-92-laI" firstAttribute="leading" secondItem="n2W-fy-2r2" secondAttribute="leadingMargin" id="Thp-Fp-qRP"/>
+                            <constraint firstItem="HXu-tP-jbi" firstAttribute="leading" secondItem="nUO-92-laI" secondAttribute="trailing" constant="8" id="WAg-tT-AfD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="HXu-tP-jbi" secondAttribute="trailing" constant="-6" id="enm-2h-mRg"/>
                             <constraint firstAttribute="centerX" secondItem="yE2-g0-bzo" secondAttribute="centerX" id="pSu-st-kTq"/>
                         </constraints>
                     </view>
@@ -332,9 +352,19 @@
             <objects>
                 <tabBarController id="aMf-nq-1bG" customClass="TabBarController" customModule="On_the_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="Ro6-p7-QwD">
-                        <barButtonItem key="leftBarButtonItem" title="Enter Location" id="6la-hn-RSy">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Xr9-2W-1F8">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cg7-Cu-RwK">
+                                <rect key="frame" x="451" y="7" width="77" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="pin-custom">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="enterLocation:" destination="aMf-nq-1bG" eventType="touchUpInside" id="Jqj-NB-pca"/>
+                                </connections>
+                            </button>
                             <connections>
-                                <action selector="enterLocation:" destination="aMf-nq-1bG" id="DXV-QL-eqM"/>
+                                <action selector="enterLocationAction:" destination="aMf-nq-1bG" id="q8P-2x-fQl"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -345,7 +375,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <outlet property="enterLocationButton" destination="6la-hn-RSy" id="kx4-dY-cmw"/>
+                        <outlet property="enterLocationButton" destination="cg7-Cu-RwK" id="sKe-4I-8iX"/>
                         <segue destination="axv-2K-fSZ" kind="relationship" relationship="viewControllers" id="8RE-ah-NxC"/>
                         <segue destination="fYj-wN-tF5" kind="show" identifier="showEnterLocation" id="LUi-MQ-PXm"/>
                         <segue destination="lZd-vw-458" kind="relationship" relationship="viewControllers" id="vad-di-PJJ"/>
@@ -356,4 +386,7 @@
             <point key="canvasLocation" x="1906" y="367"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="pin-custom" width="22" height="22"/>
+    </resources>
 </document>

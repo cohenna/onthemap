@@ -13,10 +13,11 @@ class TabBarController : UITabBarController {
     
     var currentOffset : Int = 0
     
-    @IBOutlet weak var enterLocationButton: UIBarButtonItem!
+    @IBOutlet weak var enterLocationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         (self.viewControllers![1] as! UIViewController).tabBarItem = UITabBarItem(title: "List", image: UIImage(), tag: 0)
         
         objc_sync_enter((UIApplication.sharedApplication().delegate as! AppDelegate).studentLocations)
@@ -43,7 +44,7 @@ class TabBarController : UITabBarController {
         })
     }
     
-    @IBAction func enterLocation(sender: UIBarButtonItem) {
+    @IBAction func enterLocation(sender: AnyObject) {
         // check whether user has a StudentLocation
         enterLocationButton.enabled = false
         ParseClient.sharedInstance().getStudentLocations((UIApplication.sharedApplication().delegate as! AppDelegate).udacityUser!.uniqueKey, limit : nil, offset : nil, allowDuplicates: true) {

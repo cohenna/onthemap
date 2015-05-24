@@ -147,11 +147,24 @@ class EnterUrlViewController : UIViewController, UITextFieldDelegate {
             showErrorAlert("Error with Student Location")
         }
     }
+    @IBAction func browse(sender: AnyObject) {
+        if urlText.text == DEFAULT_LOCATION_TEXT || urlText.text == "" {
+            // alert
+            self.showErrorAlert("Please Enter a Valid URL")
+            
+        } else {
+            if let url = NSURL(string: urlText.text) {
+                UIApplication.sharedApplication().openURL(url)
+            } else {
+                showErrorAlert("Invalid URL \(urlText.text)")
+            }
+        }
+    }
     
     @IBAction func submit(sender: AnyObject) {
         if urlText.text == DEFAULT_LOCATION_TEXT || urlText.text == "" {
             // alert
-            self.showErrorAlert("Please Enter a Valid Location")
+            self.showErrorAlert("Please Enter a Valid URL")
             
         } else {
             studentLocation?.mediaURL = urlText.text

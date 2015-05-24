@@ -16,8 +16,11 @@ class EnterLocationViewController : UIViewController, UITextFieldDelegate {
     
     var studentLocation : StudentLocation?
     
+    @IBOutlet weak var studyingLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var findOnTheMapButton: UIButton!
     @IBOutlet weak var locationText: UITextField!
+    @IBOutlet var outerView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         locationText.delegate = self
@@ -53,10 +56,33 @@ class EnterLocationViewController : UIViewController, UITextFieldDelegate {
         self.performSegueWithIdentifier("showEnterUrl", sender: self)
     }
     
+    func updateUIStartGeocoding() {
+        activityIndicator.startAnimating()
+        findOnTheMapButton.enabled = false
+        var alpha = CGFloat(0.5)
+        studyingLabel.alpha = alpha
+        findOnTheMapButton.alpha = alpha
+        locationText.alpha = alpha
+        outerView.alpha = alpha
+    }
+    
+    func updateUIStopGeocoding() {
+        activityIndicator.stopAnimating()
+        findOnTheMapButton.enabled = true
+        var alpha = CGFloat(1.0)
+        studyingLabel.alpha = alpha
+        findOnTheMapButton.alpha = alpha
+        locationText.alpha = alpha
+        outerView.alpha = alpha
+    }
+    
     func geoCode() {
         var geoCoder = CLGeocoder()
+        self.updateUIStartGeocoding()
+        
         geoCoder.geocodeAddressString(locationText!.text, completionHandler: {
             (result: [AnyObject]!, error: NSError!) in
+            self.updateUIStopGeocoding()
             if let error = error {
                 // show error
                 self.showErrorAlert("Please Enter a Valid Location")
