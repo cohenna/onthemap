@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../On the Map/FBSDKCoreKit.framework">
-   </FileRef>
-   <FileRef
-      location = "group:../On the Map/FBSDKLoginKit.framework">
-   </FileRef>
-   <FileRef
       location = "self:On the Map.xcodeproj">
    </FileRef>
 </Workspace>
