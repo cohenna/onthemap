@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		01C4887B1B1208CD007142EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01C488791B1208CD007142EC /* Main.storyboard */; };
-		01C4887E1B131835007142EC /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C4887D1B131835007142EC /* MapKit.framework */; };
-		01C4888D1B132107007142EC /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488881B131C9F007142EC /* FBSDKLoginKit.framework */; };
-		01C4888E1B13210C007142EC /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488871B131C9F007142EC /* FBSDKCoreKit.framework */; };
+		01C4888F1B1321E2007142EC /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C4887D1B131835007142EC /* MapKit.framework */; };
+		01C488911B132208007142EC /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488901B132208007142EC /* FBSDKLoginKit.framework */; };
+		01C488931B132260007142EC /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488921B132260007142EC /* FBSDKCoreKit.framework */; };
 		01E2A4D01B0A3961005D11C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2A4CF1B0A3961005D11C0 /* AppDelegate.swift */; };
 		01E2A4D21B0A3961005D11C0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2A4D11B0A3961005D11C0 /* LoginViewController.swift */; };
 		01E2A4D71B0A3961005D11C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01E2A4D61B0A3961005D11C0 /* Images.xcassets */; };
@@ -43,8 +43,8 @@
 /* Begin PBXFileReference section */
 		01C4887A1B1208CD007142EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		01C4887D1B131835007142EC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		01C488871B131C9F007142EC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "On the Map/FBSDKCoreKit.framework"; sourceTree = SOURCE_ROOT; };
-		01C488881B131C9F007142EC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "On the Map/FBSDKLoginKit.framework"; sourceTree = SOURCE_ROOT; };
+		01C488901B132208007142EC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		01C488921B132260007142EC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		01E2A4CA1B0A3961005D11C0 /* On the Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On the Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01E2A4CE1B0A3961005D11C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01E2A4CF1B0A3961005D11C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,9 +73,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01C4887E1B131835007142EC /* MapKit.framework in Frameworks */,
-				01C4888E1B13210C007142EC /* FBSDKCoreKit.framework in Frameworks */,
-				01C4888D1B132107007142EC /* FBSDKLoginKit.framework in Frameworks */,
+				01C488911B132208007142EC /* FBSDKLoginKit.framework in Frameworks */,
+				01C488931B132260007142EC /* FBSDKCoreKit.framework in Frameworks */,
+				01C4888F1B1321E2007142EC /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,8 +92,8 @@
 		01C4887C1B13160B007142EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				01C488871B131C9F007142EC /* FBSDKCoreKit.framework */,
-				01C488881B131C9F007142EC /* FBSDKLoginKit.framework */,
+				01C488921B132260007142EC /* FBSDKCoreKit.framework */,
+				01C488901B132208007142EC /* FBSDKLoginKit.framework */,
 				01C4887D1B131835007142EC /* MapKit.framework */,
 			);
 			name = Frameworks;
@@ -460,6 +460,7 @@
 					"$(PROJECT_DIR)/On",
 					the,
 					Map,
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "On the Map/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -483,6 +484,7 @@
 					"$(PROJECT_DIR)/On",
 					the,
 					Map,
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "On the Map/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
