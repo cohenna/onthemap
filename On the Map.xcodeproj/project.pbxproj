@@ -43,8 +43,8 @@
 /* Begin PBXFileReference section */
 		01C4887A1B1208CD007142EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		01C4887D1B131835007142EC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		01C488871B131C9F007142EC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "On the Map/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
-		01C488881B131C9F007142EC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "On the Map/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
+		01C488871B131C9F007142EC /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "On the Map/FBSDKCoreKit.framework"; sourceTree = SOURCE_ROOT; };
+		01C488881B131C9F007142EC /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "On the Map/FBSDKLoginKit.framework"; sourceTree = SOURCE_ROOT; };
 		01E2A4CA1B0A3961005D11C0 /* On the Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On the Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01E2A4CE1B0A3961005D11C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01E2A4CF1B0A3961005D11C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -474,7 +474,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/nick/Documents/FacebookSDK,
-					"$(PROJECT_DIR)/On the Map",
+					"$(PROJECT_DIR)/On",
+					the,
+					Map,
 				);
 				INFOPLIST_FILE = "On the Map/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
