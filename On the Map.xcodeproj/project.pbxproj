@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		01C4887B1B1208CD007142EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01C488791B1208CD007142EC /* Main.storyboard */; };
 		01C4887E1B131835007142EC /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C4887D1B131835007142EC /* MapKit.framework */; };
-		01C488891B131C9F007142EC /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488871B131C9F007142EC /* FBSDKCoreKit.framework */; };
-		01C4888A1B131C9F007142EC /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488881B131C9F007142EC /* FBSDKLoginKit.framework */; };
+		01C4888D1B132107007142EC /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488881B131C9F007142EC /* FBSDKLoginKit.framework */; };
+		01C4888E1B13210C007142EC /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C488871B131C9F007142EC /* FBSDKCoreKit.framework */; };
 		01E2A4D01B0A3961005D11C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2A4CF1B0A3961005D11C0 /* AppDelegate.swift */; };
 		01E2A4D21B0A3961005D11C0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2A4D11B0A3961005D11C0 /* LoginViewController.swift */; };
 		01E2A4D71B0A3961005D11C0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01E2A4D61B0A3961005D11C0 /* Images.xcassets */; };
@@ -74,8 +74,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				01C4887E1B131835007142EC /* MapKit.framework in Frameworks */,
-				01C488891B131C9F007142EC /* FBSDKCoreKit.framework in Frameworks */,
-				01C4888A1B131C9F007142EC /* FBSDKLoginKit.framework in Frameworks */,
+				01C4888E1B13210C007142EC /* FBSDKCoreKit.framework in Frameworks */,
+				01C4888D1B132107007142EC /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +457,9 @@
 					"$(PROJECT_DIR)/On",
 					the,
 					Map,
+					"$(PROJECT_DIR)/On",
+					the,
+					Map,
 				);
 				INFOPLIST_FILE = "On the Map/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -474,6 +477,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/nick/Documents/FacebookSDK,
+					"$(PROJECT_DIR)/On",
+					the,
+					Map,
 					"$(PROJECT_DIR)/On",
 					the,
 					Map,
